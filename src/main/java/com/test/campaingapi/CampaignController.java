@@ -1,8 +1,8 @@
 package com.test.campaingapi;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.campaingapi.model.Campaign;
-import com.test.campaingapi.model.CampaignRepository;
+import com.test.campaingapi.repository.CampaignRepository;
+
 
 @RestController
 @RequestMapping("/campaign")
@@ -28,8 +29,10 @@ public class CampaignController {
 	}
 
 	@GetMapping("{campaign}")
-	Campaign show(@PathVariable Campaign campaign) {
-		return campaign;
+	ResponseEntity<Campaign> show(@PathVariable Campaign campaign) {
+		if (campaign == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(campaign, HttpStatus.OK);
 	}
 
 	@PostMapping
@@ -38,21 +41,21 @@ public class CampaignController {
 	}
 
 	@PutMapping("{campaign}")
-	Campaign update(@PathVariable Campaign campaign, @RequestBody Campaign newCampaign, HttpServletResponse response) {
+	ResponseEntity<Campaign> update(@PathVariable Campaign campaign, @RequestBody Campaign newCampaign	) {
 		if (campaign == null)
-			return null;
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		newCampaign.setId(campaign.getId());
-		return campaignRepository.save(newCampaign);
+		return new ResponseEntity<>(campaignRepository.save(newCampaign), HttpStatus.OK);
 	}
 
 	@DeleteMapping("{campaign}")
-	Campaign destroy(@PathVariable Campaign campaign) {
+	ResponseEntity<Campaign> destroy(@PathVariable Campaign campaign) {
 		if (campaign == null)
-			return null;
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		campaignRepository.delete(campaign);
-		return campaign;
+		return new ResponseEntity<>(campaign, HttpStatus.OK);
 	}
 
 }

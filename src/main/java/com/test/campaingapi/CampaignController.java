@@ -14,7 +14,7 @@ public class CampaignController {
 	Campaign campaign() {
 		Campaign campaign = new Campaign();
 		campaign.setId(564);
-		campaign.setNome("Campanha linda do contorler");
+		campaign.setNome("Campanha linda do contorler hot reloooadd");
 		
 		Team team = new Team();
 		team.setNome("Curintia");

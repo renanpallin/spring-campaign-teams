@@ -1,10 +1,17 @@
 package com.test.campaingapi.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Campaign {
 
+	@Id
+	@GeneratedValue
 	private long id;
 	private String nome;
-	private Team team;
+//	private Team team;
 
 	// private DateRange dataVigencia;
 	public long getId() {
@@ -23,12 +30,12 @@ public class Campaign {
 		this.nome = nome;
 	}
 
-	public Team getTeam() {
-		return team;
-	}
-
-	public void setTeam(Team team) {
-		this.team = team;
-	}
+//	public Team getTeam() {
+//		return team;
+//	}
+//
+//	public void setTeam(Team team) {
+//		this.team = team;
+//	}
 
 }

@@ -1,6 +1,5 @@
 package com.test.campaingapi.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +24,19 @@ public class CampaignController {
 	@Autowired
 	private CampaignRepository campaignRepository;
 
+	/**
+	 * Show all the on going Campaigns 
+	 */
 	@GetMapping
 	Iterable<Campaign> index() {
-		return campaignRepository.findOnGoingCampaignsByDate(LocalDate.of(2018, 8, 02), LocalDate.of(2018, 8, 25));
-		// return campaignRepository.findOnGoingCampaigns();
-		// return campaignRepository.findByName("Terceira");
-		// return campaignRepository.findAll();
+		return campaignRepository.findOnGoingCampaigns();
 	}
 
+	/**
+	 * Show a campaign by ID
+	 * @param campaign
+	 * @return
+	 */
 	@GetMapping("{campaign}")
 	ResponseEntity<Campaign> show(@PathVariable Campaign campaign) {
 		if (campaign == null)
@@ -41,15 +45,12 @@ public class CampaignController {
 	}
 
 	@PostMapping
-	Iterable<Campaign> save(@RequestBody Campaign campaign) {
+	Campaign save(@RequestBody Campaign campaign) {
 		List<Campaign> onGoingCampaignsByDate = campaignRepository.findOnGoingCampaignsByDate(campaign.getStart(),
 				campaign.getEnd());
 
-		
 		int max = onGoingCampaignsByDate.size();
 		for (Campaign c : onGoingCampaignsByDate) {
-			System.out.println("FOR");
-			System.out.println(c);
 			c.addDayInTheEnd();
 			
 			int i = 0;
@@ -60,39 +61,55 @@ public class CampaignController {
 					continue; 
 				}
 				
-				System.out.println("::: INNER FOR");
-				System.out.println(anotherCampaign);
 				if (c.getEnd().equals(campaign.getEnd()) || c.getEnd().equals(anotherCampaign.getEnd())) {
 					c.addDayInTheEnd();
 					i = 0;
-					
-					System.out.println("adicionando dia... em c");
-					System.out.println(c);
 				} else {
 					i++;
 				}
 			}
 		}
 		
-		campaignRepository.save(campaign);
 		campaignRepository.save(onGoingCampaignsByDate);
-		return onGoingCampaignsByDate;
-	}
-	
-	@PostMapping("just-save")
-	Campaign justSave(@RequestBody Campaign campaign) {
 		return campaignRepository.save(campaign);
 	}
 
+	/**
+	 * Test method, use in develop only
+	 */
+//	@PostMapping("just-save")
+//	Campaign justSave(@RequestBody Campaign campaign) {
+//		return campaignRepository.save(campaign);
+//	}
+
+	/**
+	 * Update a campaign.
+	 * Obs: You can't update the start or end date
+	 * 
+	 * @param campaign
+	 * @param newCampaign
+	 * @return
+	 */
 	@PutMapping("{campaign}")
 	ResponseEntity<Campaign> update(@PathVariable Campaign campaign, @RequestBody Campaign newCampaign) {
 		if (campaign == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-		newCampaign.setId(campaign.getId());
-		return new ResponseEntity<>(campaignRepository.save(newCampaign), HttpStatus.OK);
+		if (newCampaign.getTeam() != null)
+			campaign.setTeam(newCampaign.getTeam());
+		
+		if (newCampaign.getName() != null)
+			campaign.setName(newCampaign.getName());
+		
+		return new ResponseEntity<Campaign>(campaignRepository.save(campaign), HttpStatus.OK);
 	}
 
+	/**
+	 * Delete an campaign by ID
+	 * 
+	 * @param campaign
+	 * @return
+	 */
 	@DeleteMapping("{campaign}")
 	ResponseEntity<Campaign> destroy(@PathVariable Campaign campaign) {
 		if (campaign == null)

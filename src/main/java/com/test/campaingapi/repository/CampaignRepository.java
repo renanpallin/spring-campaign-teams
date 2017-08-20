@@ -1,6 +1,7 @@
 package com.test.campaingapi.repository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -20,5 +21,5 @@ public interface CampaignRepository extends CrudRepository<Campaign, Long> {
 	public Iterable<Campaign> findOnGoingCampaigns();
 	
 	@Query("FROM Campaign c WHERE :start BETWEEN c.start AND c.end OR :end BETWEEN c.start AND c.end ORDER BY c.createdAt DESC")
-	public Iterable<Campaign> findOnGoingCampaignsByDate(@Param("start") LocalDate start, @Param("end") LocalDate end);
+	public ArrayList<Campaign> findOnGoingCampaignsByDate(@Param("start") LocalDate start, @Param("end") LocalDate end);
 }

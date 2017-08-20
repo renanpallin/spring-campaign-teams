@@ -40,6 +40,10 @@ public class Campaign {
 //		return team.getId();
 //	}
 	
+	public void addDayInTheEnd() {
+		setEnd(getEnd().plusDays(1));
+	}
+	
 	public long getId() {
 		return id;
 	}

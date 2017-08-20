@@ -1,6 +1,7 @@
 package com.test.campaingapi.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,26 +42,46 @@ public class CampaignController {
 
 	@PostMapping
 	Iterable<Campaign> save(@RequestBody Campaign campaign) {
-		Iterable<Campaign> onGoingCampaignsByDate = campaignRepository.findOnGoingCampaignsByDate(campaign.getStart(),
+		List<Campaign> onGoingCampaignsByDate = campaignRepository.findOnGoingCampaignsByDate(campaign.getStart(),
 				campaign.getEnd());
 
+		
+		int max = onGoingCampaignsByDate.size();
 		for (Campaign c : onGoingCampaignsByDate) {
-			c.setEnd(c.getEnd().plusDays(1));
-		}
-
-		for (Campaign c : onGoingCampaignsByDate) {
-			if (c == campaign)
-				continue;
-			if (campaign.getEnd().equals(c.getEnd())) {
-				System.out.println("ENCONTRAMOS");
-				System.out.println(campaign);
-				System.out.println(c);
-				c.setEnd(c.getEnd().plusDays(1));
-				// campaignRepository.save(c);
+			System.out.println("FOR");
+			System.out.println(c);
+			c.addDayInTheEnd();
+			
+			int i = 0;
+			while(i < max) {
+				Campaign anotherCampaign = onGoingCampaignsByDate.get(i);
+				if (anotherCampaign == c) {
+					i++;
+					continue; 
+				}
+				
+				System.out.println("::: INNER FOR");
+				System.out.println(anotherCampaign);
+				if (c.getEnd().equals(campaign.getEnd()) || c.getEnd().equals(anotherCampaign.getEnd())) {
+					c.addDayInTheEnd();
+					i = 0;
+					
+					System.out.println("adicionando dia... em c");
+					System.out.println(c);
+				} else {
+					i++;
+				}
 			}
 		}
-		// campaignRepository.save(campaign);
+		
+		campaignRepository.save(campaign);
+		campaignRepository.save(onGoingCampaignsByDate);
 		return onGoingCampaignsByDate;
+	}
+	
+	@PostMapping("just-save")
+	Campaign justSave(@RequestBody Campaign campaign) {
+		return campaignRepository.save(campaign);
 	}
 
 	@PutMapping("{campaign}")

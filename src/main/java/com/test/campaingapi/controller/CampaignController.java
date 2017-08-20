@@ -1,4 +1,4 @@
-package com.test.campaingapi;
+package com.test.campaingapi.controller;
 
 import java.time.LocalDate;
 
@@ -17,25 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.test.campaingapi.model.Campaign;
 import com.test.campaingapi.repository.CampaignRepository;
 
-
 @RestController
 @RequestMapping("/campaign")
 public class CampaignController {
 
 	@Autowired
 	private CampaignRepository campaignRepository;
-	
-	@GetMapping("test")
-	LocalDate test() {
-		return LocalDate.of(2015, 05, 05);
-	}
 
 	@GetMapping
 	Iterable<Campaign> index() {
-		return campaignRepository.findAll();
+		return campaignRepository.findOnGoingCampaignsByDate(LocalDate.of(2018, 8, 02), LocalDate.of(2018, 8, 25));
+		// return campaignRepository.findOnGoingCampaigns();
+		// return campaignRepository.findByName("Terceira");
+		// return campaignRepository.findAll();
 	}
-	
-    @GetMapping("{campaign}")
+
+	@GetMapping("{campaign}")
 	ResponseEntity<Campaign> show(@PathVariable Campaign campaign) {
 		if (campaign == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,8 +40,27 @@ public class CampaignController {
 	}
 
 	@PostMapping
-	Campaign save(@RequestBody Campaign campaign) {
-		return campaignRepository.save(campaign);
+	Iterable<Campaign> save(@RequestBody Campaign campaign) {
+		Iterable<Campaign> onGoingCampaignsByDate = campaignRepository.findOnGoingCampaignsByDate(campaign.getStart(),
+				campaign.getEnd());
+
+		for (Campaign c : onGoingCampaignsByDate) {
+			c.setEnd(c.getEnd().plusDays(1));
+		}
+
+		for (Campaign c : onGoingCampaignsByDate) {
+			if (c == campaign)
+				continue;
+			if (campaign.getEnd().equals(c.getEnd())) {
+				System.out.println("ENCONTRAMOS");
+				System.out.println(campaign);
+				System.out.println(c);
+				c.setEnd(c.getEnd().plusDays(1));
+				// campaignRepository.save(c);
+			}
+		}
+		// campaignRepository.save(campaign);
+		return onGoingCampaignsByDate;
 	}
 
 	@PutMapping("{campaign}")

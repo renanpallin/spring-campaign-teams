@@ -6,12 +6,12 @@ import javax.persistence.Id;
 
 @Entity
 public class Team {
-	
+
 	@Id
 	@GeneratedValue
 	private long id;
-	private String nome;
-
+	private String name;
+  
 	public long getId() {
 		return id;
 	}
@@ -20,12 +20,23 @@ public class Team {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
-	
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Team [id=");
+		builder.append(id);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

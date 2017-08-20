@@ -1,6 +1,7 @@
 package com.test.campaingapi.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Campaign {
@@ -17,6 +19,8 @@ public class Campaign {
 	private long id;
 	private String name;
 
+//	@JsonProperty("team_id")
+//	@JsonUnwrapped 
 	@OneToOne
 	private Team team;
 
@@ -25,7 +29,17 @@ public class Campaign {
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate end;
-
+	
+	@JsonIgnore
+	private LocalDateTime createdAt = LocalDateTime.now();
+	
+//	@JsonGetter("team_id") 
+//	public Long getTeamId() {
+//		if (team == null)
+//			return null;
+//		return team.getId();
+//	}
+	
 	public long getId() {
 		return id;
 	}
@@ -66,6 +80,26 @@ public class Campaign {
 		this.end = end;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Campaign [id=");
+		builder.append(id);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", team=");
+		builder.append(team);
+		builder.append(", start=");
+		builder.append(start);
+		builder.append(", end=");
+		builder.append(end);
+		builder.append(", createdAt=");
+		builder.append(createdAt);
+		builder.append("]");
+		return builder.toString();
+	}
+
+	
 	// public String getStart() {
 	// if (start == null)
 	// return null;

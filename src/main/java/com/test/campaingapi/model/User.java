@@ -1,7 +1,8 @@
 package com.test.campaingapi.model;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ public class User {
 	private Team team;
 
 	@ManyToMany
-	private List<Campaign> campaigns;
+	private Set<Campaign> campaigns = new HashSet<>();
 
 	@JsonIgnore
 	@Column(name = "is_active")
@@ -44,6 +45,10 @@ public class User {
 
 	public void disable() {
 		this.active = false;
+	}
+	
+	public boolean associate(Set<Campaign> campaigns) {
+		return getCampaigns().addAll(campaigns);
 	}
 
 	public String getName() {
@@ -78,12 +83,8 @@ public class User {
 		this.team = team;
 	}
 
-	public List<Campaign> getCampaigns() {
+	public Set<Campaign> getCampaigns() {
 		return campaigns;
-	}
-
-	public void setCampaigns(List<Campaign> campaigns) {
-		this.campaigns = campaigns;
 	}
 
 }

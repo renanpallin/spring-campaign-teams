@@ -2,6 +2,7 @@ package com.test.campaingapi.repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -24,6 +25,6 @@ public interface CampaignRepository extends CrudRepository<Campaign, Long> {
 	public ArrayList<Campaign> findOnGoingCampaignsByDate(@Param("start") LocalDate start, @Param("end") LocalDate end);
 	
 	@Query("SELECT c FROM Campaign c JOIN c.team t WHERE t.id = :id AND c.start > CURRENT_DATE")
-	public ArrayList<Campaign> findOnGoingByTeamId(@Param("id") long id);
+	public HashSet<Campaign> findOnGoingByTeamId(@Param("id") long id);
 	
 }

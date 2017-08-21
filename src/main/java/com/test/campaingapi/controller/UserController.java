@@ -1,8 +1,8 @@
 package com.test.campaingapi.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,47 +41,35 @@ public class UserController {
 	}
 
 	/** 
-	 * Create a new user
+	 * Create a new user and associate with campaigns by his team
 	 * @param user
 	 * @return
 	 */
 	@PostMapping
-	Map<String, Object> save(@RequestBody Map<String, Object> payload) {
-		User u = userRepository.findOne(payload.get("email").toString());
-
-		Map<String, Object> response = new HashMap<>();
-		
-		if (u != null) {
-			List<Campaign> campaigns = campaignRepository.findOnGoingByTeamId(u.getTeam().getId());
-
-			response.put("campaigns", campaigns);
-			
-			/**
-			 * TODO: Checar se o usuári opossui campanhas associadas, a mensagem abaixo é para o caso de não ter.
-			 * Caso tenha, vamos enviar as já associadas por ele
-			 */
-			if (!campaigns.isEmpty())
-				response.put("message", String.format("Olá, %s! Seu cadastro já foi efetuado e "
-						+ "você não está associado a nenhuma campanha. "
-						+ "Aqui está uma lista de campanhas do seu time do coração! "
-						+ "Você pode se cadastrar com um POST no endpoint /campaign/subscribe, "
-						+ "enviando no body um JSON com o campaign_id e seu e-mail.", u.getName()));
-			else
-				response.put("message", String.format("Olá, %s! Seu cadastro já foi efetuado e "
-						+ "você não está associado a nenhuma campanha. "
-						+ "Infelizmente não temos nenuma campanha do seu time do coração no momento =(. Mas continue ligado!", u.getName()));
-		} else {
-			response.put("message", String.format("Olá, %s! Seu cadastro foi efetuado com sucesso!"));
+	Map<String, Object> associate(@RequestBody User requester) {
+		/* Not the best way, but prevents null fields accidentally */ 
+		User user = userRepository.findOne(requester.getEmail());
+		boolean isNewUser = false;
+		if (user == null) {
+			user = userRepository.save(requester);			
+			isNewUser = true;
 		}
-
+		
+		Set<Campaign> campaigns = campaignRepository.findOnGoingByTeamId(user.getTeam().getId());
+		user.associate(campaigns);
+		
+		Map<String, Object> response = new HashMap<>();
+		String messageFormat = isNewUser ?
+				"Seja bem vindo, %s! Associamos você às campanhas do seu time do coração." :
+				"Bem vindo de volta, %s! As novas campanhas já foram associadas à você ;)";
+			
+		
+		response.put("message", String.format(messageFormat, user.getName()));
+		response.put("campaigns", user.getCampaigns());
+		
 		return response;
 	}
 
-	@PostMapping("add")
-	User save(@RequestBody User user) {
-		return userRepository.save(user);	
-	}
-	
 	/**
 	 * Update a user.
 	 *

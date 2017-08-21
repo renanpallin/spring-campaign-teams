@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +22,8 @@ public class Campaign {
 
 //	@JsonProperty("team_id")
 //	@JsonUnwrapped 
-	@OneToOne
+	@ManyToOne
+	@NotNull
 	private Team team;
 
 	@JsonFormat(pattern = "dd/MM/yyyy")

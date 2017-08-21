@@ -11,7 +11,7 @@ import com.test.campaingapi.model.Campaign;
 
 public interface CampaignRepository extends CrudRepository<Campaign, Long> {
 
-	@Query("from Campaign c where c.name=:campaingName")
+	@Query("FROM Campaign c WHERE c.name=:campaingName")
 	public Iterable<Campaign> findByName(@Param("campaingName") String campaingName);
 	
 	@Query("FROM Campaign c WHERE c.start > CURRENT_DATE AND c.end < CURRENT_DATE")
@@ -22,4 +22,8 @@ public interface CampaignRepository extends CrudRepository<Campaign, Long> {
 	
 	@Query("FROM Campaign c WHERE :start BETWEEN c.start AND c.end OR :end BETWEEN c.start AND c.end ORDER BY c.createdAt DESC")
 	public ArrayList<Campaign> findOnGoingCampaignsByDate(@Param("start") LocalDate start, @Param("end") LocalDate end);
+	
+	@Query("SELECT c FROM Campaign c JOIN c.team t WHERE t.id = :id AND c.start > CURRENT_DATE")
+	public ArrayList<Campaign> findOnGoingByTeamId(@Param("id") long id);
+	
 }

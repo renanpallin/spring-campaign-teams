@@ -61,6 +61,10 @@ o Exemplo:
     -> 3.2.1 Campanha 1: 01/10/2017 a 05/10/2017
     3.3 Incluindo campanha 3 : 01/10/2017 a 03/10/2017
 
+Observações:
+Não foi especificado explicitamente quais campanhas deveriam ter prioridade em manter sua data de final, então, com base no exemplo fornecido, foi assumido que as últimas inseridas são as que tem prioridades. Para isso, foi criado uma propriedade na classe Campaign que registra a data de criação, para podermos aplicar a lógica com a prioridade assumida.
+Detalhes sobre como deveria ser o update de uma campanha no que dis respeito à data de vigência não foram fornecidos, então foi assumido que não seria possível alterar tais datas com um update simples.
+
 ###### /team
 REST para Time
 

@@ -115,7 +115,7 @@ Para a base de dados, crie uma nova base com o nome de sua escolha:
 ```sql
 CREATE DATABASE <nome_de_sua_base>;
 ```
-E registre as credenciais em `CampaignApi/src/main/resources/application.properties`. É um arquivo de configuração do Spring. Altere as seguintes linhas:
+E registre as credenciais em `src/main/resources/application.properties`. É um arquivo de configuração do Spring. Altere as seguintes linhas:
 
 ```properties
 spring.jpa.hibernate.ddl-auto=create # Para não perder os dados, mude para "update"

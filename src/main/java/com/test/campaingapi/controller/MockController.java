@@ -45,7 +45,9 @@ public class MockController {
 		c2.setEnd(LocalDate.of(2017, 10, 02));
 		
 		
-		new ArrayList<Campaign>(){{
+		new ArrayList<Campaign>(){
+			private static final long serialVersionUID = 1L;
+		{
 			add(c1);
 			add(c2);
 		}}.forEach(c -> {

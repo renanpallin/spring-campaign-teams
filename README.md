@@ -43,6 +43,16 @@ REST para campaign
 | PUT | /campaign/:id | Atualiza uma campanha |
 | DELETE | /campaign/:id | Deleta uma campanha |
 
+Exemplo de requisição POST:
+```json
+{
+    "name": "Campanha 3",
+    "start": "01/10/2017",
+    "end": "03/10/2017",
+    "team": {"id": 1}
+}
+```
+
 Existem algumas regras para a criação de uma campanha, descritas a seguir:
 > No cadastramento de uma nova campanha, deve-se verificar se já existe uma campanha
 ativa para aquele período (vigência), caso exista uma campanha ou N campanhas associadas

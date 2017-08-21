@@ -4,6 +4,7 @@ Este sistema expõe serviços de cadastros de campanhas e sócio torcedores. Uma
 #### Models
 ##### Campanha (Campaign)
 Uma campanha associada a um time; sócios torcedores podem associar a uma campanha.
+
 | Campo         | Tipo        |
 | ------------- | ------------- |
 | Nome          | String |
@@ -13,12 +14,14 @@ Uma campanha associada a um time; sócios torcedores podem associar a uma campan
 
 ##### Time (Team)
 Um time de futebol;
+
 | Campo         | Tipo        |
 | ------------- | ------------- |
 | Nome          | String |
 
 ###### Sócio Torcedor (User)
 Usuário do sistema
+
 | Campo         | Tipo        |
 | ------------- | ------------- |
 | Nome          | String |
@@ -31,6 +34,7 @@ Usuário do sistema
 #### Endpoints
 ###### /campaign
 REST para campaign
+
 | Metodo        | Endpoing | Descrição                             |
 | ------------- | -------- | --------------------------------------|
 | GET | /campaign | Lista todas as campanhas não vencidas |
@@ -59,6 +63,7 @@ o Exemplo:
 
 ###### /team
 REST para Time
+
 | Metodo        | Endpoing | Descrição                             |
 | ------------- | -------- | --------------------------------------|
 | GET | /team | Lista todas os times |
@@ -69,6 +74,7 @@ REST para Time
 
 ###### /socio-torcedor
 REST para User
+
 | Metodo        | Endpoing | Descrição                             |
 | ------------- | -------- | --------------------------------------|
 | POST | /socio-torcedor | Cria o usuário e associa campanhas do time do coração à ele |
@@ -90,6 +96,7 @@ Todas as trocas de mensagens são feitas por JSON.
 
 #### Mock e testes
 Foi criada um endpoint com a finalidade de facilitar os testes à este projeto:
+
 | Metodo        | Endpoing | Descrição                             |
 | ------------- | -------- | --------------------------------------|
 | GET | /mock | Insere 7 times e 2 campanhas ao banco de de dados |
@@ -109,7 +116,8 @@ Para a base de dados, crie uma nova base com o nome de sua escolha:
 CREATE DATABASE <nome_de_sua_base>;
 ```
 E registre as credenciais em `CampaignApi/src/main/resources/application.properties`. É um arquivo de configuração do Spring. Altere as seguintes linhas:
-```
+
+```properties
 spring.jpa.hibernate.ddl-auto=create # Para não perder os dados, mude para "update"
 spring.datasource.url=jdbc:mysql://localhost:3306/<nome_de_sua_base>?useSSL=false
 spring.datasource.username=<usuario_de_sua_base>
